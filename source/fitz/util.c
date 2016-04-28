@@ -4,7 +4,7 @@ fz_display_list *
 fz_new_display_list_from_page(fz_context *ctx, fz_page *page)
 {
 	fz_display_list *list;
-	fz_device *dev;
+	fz_device *dev = NULL;
 
 	list = fz_new_display_list(ctx);
 
@@ -30,7 +30,7 @@ fz_display_list *
 fz_new_display_list_from_page_number(fz_context *ctx, fz_document *doc, int number)
 {
 	fz_page *page;
-	fz_display_list *list;
+	fz_display_list *list = NULL;
 
 	page = fz_load_page(ctx, doc, number);
 	fz_try(ctx)
@@ -48,7 +48,7 @@ fz_new_pixmap_from_display_list(fz_context *ctx, fz_display_list *list, const fz
 	fz_rect rect;
 	fz_irect irect;
 	fz_pixmap *pix;
-	fz_device *dev;
+	fz_device *dev = NULL;
 
 	fz_bound_display_list(ctx, list, &rect);
 	fz_transform_rect(&rect, ctm);
@@ -84,7 +84,7 @@ fz_new_pixmap_from_page_contents(fz_context *ctx, fz_page *page, const fz_matrix
 	fz_rect rect;
 	fz_irect irect;
 	fz_pixmap *pix;
-	fz_device *dev;
+	fz_device *dev = NULL;
 
 	fz_bound_page(ctx, page, &rect);
 	fz_transform_rect(&rect, ctm);
@@ -117,7 +117,7 @@ fz_new_pixmap_from_annot(fz_context *ctx, fz_annot *annot, const fz_matrix *ctm,
 	fz_rect rect;
 	fz_irect irect;
 	fz_pixmap *pix;
-	fz_device *dev;
+	fz_device *dev = NULL;
 
 	fz_bound_annot(ctx, annot, &rect);
 	fz_transform_rect(&rect, ctm);
@@ -150,7 +150,7 @@ fz_new_pixmap_from_page(fz_context *ctx, fz_page *page, const fz_matrix *ctm, fz
 	fz_rect rect;
 	fz_irect irect;
 	fz_pixmap *pix;
-	fz_device *dev;
+	fz_device *dev = NULL;
 
 	fz_bound_page(ctx, page, &rect);
 	fz_transform_rect(&rect, ctm);
@@ -181,7 +181,7 @@ fz_pixmap *
 fz_new_pixmap_from_page_number(fz_context *ctx, fz_document *doc, int number, const fz_matrix *ctm, fz_colorspace *cs)
 {
 	fz_page *page;
-	fz_pixmap *pix;
+	fz_pixmap *pix = NULL;
 
 	page = fz_load_page(ctx, doc, number);
 	fz_try(ctx)
@@ -197,7 +197,7 @@ fz_stext_page *
 fz_new_stext_page_from_display_list(fz_context *ctx, fz_display_list *list, fz_stext_sheet *sheet)
 {
 	fz_stext_page *text;
-	fz_device *dev;
+	fz_device *dev = NULL;
 
 	text = fz_new_stext_page(ctx);
 	fz_try(ctx)
@@ -222,7 +222,7 @@ fz_stext_page *
 fz_new_stext_page_from_page(fz_context *ctx, fz_page *page, fz_stext_sheet *sheet)
 {
 	fz_stext_page *text;
-	fz_device *dev;
+	fz_device *dev = NULL;
 
 	text = fz_new_stext_page(ctx);
 	fz_try(ctx)
@@ -247,7 +247,7 @@ fz_stext_page *
 fz_new_stext_page_from_page_number(fz_context *ctx, fz_document *doc, int number, fz_stext_sheet *sheet)
 {
 	fz_page *page;
-	fz_stext_page *text;
+	fz_stext_page *text = NULL;
 
 	page = fz_load_page(ctx, doc, number);
 	fz_try(ctx)
@@ -263,8 +263,8 @@ int
 fz_search_display_list(fz_context *ctx, fz_display_list *list, const char *needle, fz_rect *hit_bbox, int hit_max)
 {
 	fz_stext_sheet *sheet;
-	fz_stext_page *text;
-	int count;
+	fz_stext_page *text = NULL;
+	int count = 0;
 
 	sheet = fz_new_stext_sheet(ctx);
 	fz_try(ctx)
@@ -284,8 +284,8 @@ int
 fz_search_page(fz_context *ctx, fz_page *page, const char *needle, fz_rect *hit_bbox, int hit_max)
 {
 	fz_stext_sheet *sheet;
-	fz_stext_page *text;
-	int count;
+	fz_stext_page *text = NULL;
+	int count = 0;
 
 	sheet = fz_new_stext_sheet(ctx);
 	fz_try(ctx)
@@ -305,7 +305,7 @@ int
 fz_search_page_number(fz_context *ctx, fz_document *doc, int number, const char *needle, fz_rect *hit_bbox, int hit_max)
 {
 	fz_page *page;
-	int count;
+	int count = 0;
 
 	page = fz_load_page(ctx, doc, number);
 	fz_try(ctx)
@@ -400,8 +400,8 @@ fz_buffer *
 fz_new_buffer_from_display_list(fz_context *ctx, fz_display_list *list, const fz_rect *sel, int crlf)
 {
 	fz_stext_sheet *sheet;
-	fz_stext_page *text;
-	fz_buffer *buf;
+	fz_stext_page *text = NULL;
+	fz_buffer *buf = NULL;
 
 	sheet = fz_new_stext_sheet(ctx);
 	fz_try(ctx)
@@ -421,8 +421,8 @@ fz_buffer *
 fz_new_buffer_from_page(fz_context *ctx, fz_page *page, const fz_rect *sel, int crlf)
 {
 	fz_stext_sheet *sheet;
-	fz_stext_page *text;
-	fz_buffer *buf;
+	fz_stext_page *text = NULL;
+	fz_buffer *buf = NULL;
 
 	sheet = fz_new_stext_sheet(ctx);
 	fz_try(ctx)
@@ -442,7 +442,7 @@ fz_buffer *
 fz_new_buffer_from_page_number(fz_context *ctx, fz_document *doc, int number, const fz_rect *sel, int crlf)
 {
 	fz_page *page;
-	fz_buffer *buf;
+	fz_buffer *buf = NULL;
 
 	page = fz_load_page(ctx, doc, number);
 	fz_try(ctx)

@@ -74,12 +74,12 @@ static OPJ_BOOL fz_opj_stream_seek(OPJ_OFF_T seek_pos, void * p_user_data)
 fz_pixmap *
 fz_load_jpx(fz_context *ctx, unsigned char *data, int size, fz_colorspace *defcs, int indexed)
 {
-	fz_pixmap *img;
+	fz_pixmap *img = NULL;
 	opj_dparameters_t params;
 	opj_codec_t *codec;
 	opj_image_t *jpx;
 	opj_stream_t *stream;
-	fz_colorspace *colorspace;
+	fz_colorspace *colorspace = NULL;
 	unsigned char *p;
 	OPJ_CODEC_FORMAT format;
 	int a, n, w, h, depth, sgnd;

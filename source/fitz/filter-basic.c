@@ -56,7 +56,7 @@ close_null(fz_context *ctx, void *state_)
 fz_stream *
 fz_open_null(fz_context *ctx, fz_stream *chain, int len, fz_off_t offset)
 {
-	struct null_filter *state;
+	struct null_filter *state = NULL;
 
 	if (len < 0)
 		len = 0;
@@ -276,7 +276,7 @@ close_ahxd(fz_context *ctx, void *state_)
 fz_stream *
 fz_open_ahxd(fz_context *ctx, fz_stream *chain)
 {
-	fz_ahxd *state;
+	fz_ahxd *state = NULL;
 
 	fz_try(ctx)
 	{
@@ -420,7 +420,7 @@ close_a85d(fz_context *ctx, void *state_)
 fz_stream *
 fz_open_a85d(fz_context *ctx, fz_stream *chain)
 {
-	fz_a85d *state;
+	fz_a85d *state = NULL;
 
 	fz_try(ctx)
 	{
@@ -531,7 +531,7 @@ close_rld(fz_context *ctx, void *state_)
 fz_stream *
 fz_open_rld(fz_context *ctx, fz_stream *chain)
 {
-	fz_rld *state;
+	fz_rld *state = NULL;
 
 	fz_try(ctx)
 	{
@@ -594,7 +594,7 @@ close_arc4(fz_context *ctx, void *state_)
 fz_stream *
 fz_open_arc4(fz_context *ctx, fz_stream *chain, unsigned char *key, unsigned keylen)
 {
-	fz_arc4c *state;
+	fz_arc4c *state = NULL;
 
 	fz_try(ctx)
 	{

@@ -664,7 +664,7 @@ static fz_pixmap *
 bmp_read_bitmap(fz_context *ctx, struct info *info, unsigned char *p, unsigned char *end)
 {
 	const int mults[] = { 0, 8191, 2730, 1170, 546, 264, 130, 64 };
-	fz_pixmap *pix;
+	fz_pixmap *pix = NULL;
 	unsigned char *decompressed = NULL;
 	unsigned char *ssp, *ddp;
 	int bitcount, width, height;

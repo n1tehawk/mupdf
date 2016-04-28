@@ -1950,7 +1950,7 @@ free_indexed(fz_context *ctx, fz_colorspace *cs)
 fz_colorspace *
 fz_new_indexed_colorspace(fz_context *ctx, fz_colorspace *base, int high, unsigned char *lookup)
 {
-	fz_colorspace *cs;
+	fz_colorspace *cs = NULL;
 	struct indexed *idx;
 
 	idx = fz_malloc_struct(ctx, struct indexed);

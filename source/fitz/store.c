@@ -259,7 +259,7 @@ fz_store_item(fz_context *ctx, void *key, void *val_, size_t itemsize, fz_store_
 	 * to check whether we have one there already. */
 	if (use_hash)
 	{
-		fz_item *existing;
+		fz_item *existing = NULL;
 
 		fz_try(ctx)
 		{

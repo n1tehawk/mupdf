@@ -711,7 +711,7 @@ size_t fz_image_size(fz_context *ctx, fz_image *im)
 fz_image *
 fz_new_image_from_pixmap(fz_context *ctx, fz_pixmap *pixmap, fz_image *mask)
 {
-	fz_pixmap_image *image;
+	fz_pixmap_image *image = NULL;
 
 	assert(mask == NULL || mask->mask == NULL);
 
@@ -800,7 +800,7 @@ fz_new_image_from_compressed_buffer(fz_context *ctx, int w, int h,
 	int xres, int yres, int interpolate, int imagemask, float *decode,
 	int *colorkey, fz_compressed_buffer *buffer, fz_image *mask)
 {
-	fz_compressed_image *image;
+	fz_compressed_image *image = NULL;
 
 	fz_try(ctx)
 	{
@@ -867,7 +867,7 @@ fz_image *
 fz_new_image_from_data(fz_context *ctx, unsigned char *data, int len)
 {
 	fz_buffer *buffer = NULL;
-	fz_image *image;
+	fz_image *image = NULL;
 
 	fz_var(buffer);
 	fz_var(data);
@@ -899,7 +899,7 @@ fz_new_image_from_buffer(fz_context *ctx, fz_buffer *buffer)
 	fz_colorspace *cspace = NULL;
 	int len = buffer->len;
 	unsigned char *buf = buffer->data;
-	fz_image *image;
+	fz_image *image = NULL;
 
 	fz_var(bc);
 	fz_var(cspace);
@@ -965,7 +965,7 @@ fz_image *
 fz_new_image_from_file(fz_context *ctx, const char *path)
 {
 	fz_buffer *buffer;
-	fz_image *image;
+	fz_image *image = NULL;
 
 	buffer = fz_read_file(ctx, path);
 	fz_try(ctx)

@@ -12,7 +12,7 @@ fz_file_exists(fz_context *ctx, const char *path)
 fz_stream *
 fz_new_stream(fz_context *ctx, void *state, fz_stream_next_fn *next, fz_stream_close_fn *close)
 {
-	fz_stream *stm;
+	fz_stream *stm = NULL;
 
 	fz_try(ctx)
 	{
@@ -113,7 +113,7 @@ static void close_file(fz_context *ctx, void *state_)
 fz_stream *
 fz_open_file_ptr(fz_context *ctx, FILE *file)
 {
-	fz_stream *stm;
+	fz_stream *stm = NULL;
 	fz_file_stream *state = fz_malloc_struct(ctx, fz_file_stream);
 	state->file = file;
 

@@ -109,7 +109,7 @@ static int meta_prog(fz_context *ctx, fz_stream *stm, int key, int size, void *p
 fz_stream *
 fz_open_file_ptr_progressive(fz_context *ctx, FILE *file, int bps)
 {
-	fz_stream *stm;
+	fz_stream *stm = NULL;
 	prog_state *state;
 
 	state = fz_malloc_struct(ctx, prog_state);

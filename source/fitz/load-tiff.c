@@ -870,7 +870,7 @@ fz_decode_tiff_ifd(fz_context *ctx, struct tiff *tiff)
 fz_pixmap *
 fz_load_tiff_subimage(fz_context *ctx, unsigned char *buf, int len, int subimage)
 {
-	fz_pixmap *image;
+	fz_pixmap *image = NULL;
 	struct tiff tiff = { 0 };
 
 	fz_try(ctx)

@@ -479,7 +479,7 @@ fz_archive *
 fz_open_archive(fz_context *ctx, const char *filename)
 {
 	fz_stream *file;
-	fz_archive *zip;
+	fz_archive *zip = NULL;
 
 	file = fz_open_file(ctx, filename);
 
