@@ -53,7 +53,7 @@ endif
 
 CC_CMD = $(QUIET_CC) $(CC) $(CFLAGS) -o $@ -c $<
 CXX_CMD = $(QUIET_CXX) $(CXX) $(CFLAGS) -o $@ -c $<
-AR_CMD = $(QUIET_AR) $(AR) cr $@ $^
+AR_CMD = $(QUIET_AR) $(file >$@.in,$^) $(AR) cr $@ @$@.in ; rm $@.in
 LINK_CMD = $(QUIET_LINK) $(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
 MKDIR_CMD = $(QUIET_MKDIR) mkdir -p $@
 RM_CMD = $(QUIET_RM) rm -f $@
