@@ -37,6 +37,7 @@ endif
 CC_CMD = $(QUIET_CC) $(CC) $(CFLAGS) -o $@ -c $<
 CXX_CMD = $(QUIET_CXX) $(CXX) $(CFLAGS) -o $@ -c $<
 AR_CMD = $(QUIET_AR) $(AR) cr $@ $^
+SO_CMD = $(QUIET_LINK) $(CC) -fPIC --shared -Wl,-soname,$(notdir $@) $^ -o $@ $(LIBS)
 LINK_CMD = $(QUIET_LINK) $(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
 LINK_V8_CMD = $(QUIET_LINK) $(CXX) $(LDFLAGS) -o $@ $^ $(LIBS_V8)
 MKDIR_CMD = $(QUIET_MKDIR) mkdir -p $@
@@ -80,6 +81,7 @@ $(OUT)/%.o : scripts/%.c | $(OUT)
 # --- Fitz, MuPDF, MuXPS and MuCBZ library ---
 
 FITZ_LIB := $(OUT)/libfitz.a
+FITZ_LIB_SO := $(OUT)/libfitz.so.1.0
 FITZ_V8_LIB := $(OUT)/libfitzv8.a
 
 FITZ_SRC := $(notdir $(wildcard fitz/*.c draw/*.c))
@@ -91,10 +93,10 @@ MUPDF_V8_CPP_SRC := $(notdir $(wildcard pdf/*.cpp))
 MUXPS_SRC := $(notdir $(wildcard xps/*.c))
 MUCBZ_SRC := $(notdir $(wildcard cbz/*.c))
 
-$(FITZ_LIB) : $(addprefix $(OUT)/, $(FITZ_SRC:%.c=%.o))
-$(FITZ_LIB) : $(addprefix $(OUT)/, $(MUPDF_SRC:%.c=%.o))
-$(FITZ_LIB) : $(addprefix $(OUT)/, $(MUXPS_SRC:%.c=%.o))
-$(FITZ_LIB) : $(addprefix $(OUT)/, $(MUCBZ_SRC:%.c=%.o))
+FITZ_OBJECT_FILES := $(addprefix $(OUT)/, $(FITZ_SRC:%.c=%.o))
+FITZ_OBJECT_FILES += $(addprefix $(OUT)/, $(MUPDF_SRC:%.c=%.o))
+FITZ_OBJECT_FILES += $(addprefix $(OUT)/, $(MUXPS_SRC:%.c=%.o))
+FITZ_OBJECT_FILES += $(addprefix $(OUT)/, $(MUCBZ_SRC:%.c=%.o))
 
 $(FITZ_V8_LIB) : $(addprefix $(OUT)/, $(FITZ_SRC:%.c=%.o))
 $(FITZ_V8_LIB) : $(addprefix $(OUT)/, $(MUPDF_V8_SRC:%.c=%.o))
@@ -102,7 +104,14 @@ $(FITZ_V8_LIB) : $(addprefix $(OUT)/, $(MUPDF_V8_CPP_SRC:%.cpp=%.o))
 $(FITZ_V8_LIB) : $(addprefix $(OUT)/, $(MUXPS_SRC:%.c=%.o))
 $(FITZ_V8_LIB) : $(addprefix $(OUT)/, $(MUCBZ_SRC:%.c=%.o))
 
-libs: $(FITZ_LIB) $(THIRD_LIBS)
+$(FITZ_LIB): $(FITZ_OBJECT_FILES)
+$(FITZ_LIB_SO): $(FITZ_OBJECT_FILES)
+
+libs: $(FITZ_LIB) $(FITZ_LIB_SO) $(THIRD_LIBS)
+
+$(FITZ_LIB_SO):
+	$(SO_CMD)
+	@cd $(OUT) && ln -s $(notdir $(FITZ_LIB_SO)) libfitz.so
 libs_v8: libs $(FITZ_V8_LIB)
 
 # --- Generated CMAP, FONT and JAVASCRIPT files ---
@@ -211,6 +220,8 @@ mandir ?= $(prefix)/share/man
 install: $(FITZ_LIB) $(MUVIEW) $(MUDRAW) $(MUTOOL)
 	install -d $(DESTDIR)$(bindir) $(DESTDIR)$(libdir) $(DESTDIR)$(incdir) $(DESTDIR)$(mandir)/man1
 	install $(FITZ_LIB) $(DESTDIR)$(libdir)
+	install $(FITZ_LIB_SO) $(libdir)
+	install $(OUT)/libfitz.so $(libdir)
 	install fitz/memento.h fitz/fitz.h pdf/mupdf.h xps/muxps.h cbz/mucbz.h $(DESTDIR)$(incdir)
 	install $(MUVIEW) $(MUDRAW) $(MUBUSY) $(DESTDIR)$(bindir)
 	install $(wildcard apps/man/*.1) $(DESTDIR)$(mandir)/man1
@@ -219,7 +230,9 @@ install: $(FITZ_LIB) $(MUVIEW) $(MUDRAW) $(MUTOOL)
 
 all: all-nojs $(JSTARGETS)
 
-all-nojs: $(THIRD_LIBS) $(FITZ_LIB) $(MUVIEW) $(MUDRAW) $(MUTOOL)
+all-nojs: $(THIRD_LIBS) $(FITZ_LIB) $(FITZ_LIB_SO) $(MUVIEW) $(MUDRAW) $(MUTOOL)
+
+libfitz:  $(FITZ_LIB_SO)
 
 third: $(THIRD_LIBS)
 

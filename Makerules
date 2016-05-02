@@ -3,7 +3,7 @@
 OS ?= $(shell uname)
 OS := $(OS:MINGW%=MINGW)
 
-CFLAGS += -Wall
+CFLAGS += -Wall -fPIC
 
 ifeq "$(build)" "debug"
 CFLAGS += -pipe -g -DDEBUG
