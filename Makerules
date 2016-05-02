@@ -3,7 +3,10 @@
 OS ?= $(shell uname)
 OS := $(OS:MINGW%=MINGW)
 
-CFLAGS += -Wall -fPIC
+CFLAGS += -Wall
+ifneq (Windows_NT,$(OS)) # on Windows, -fPIC is already the default
+CFLAGS += -fPIC
+endif
 
 ifeq "$(build)" "debug"
 CFLAGS += -pipe -g -DDEBUG

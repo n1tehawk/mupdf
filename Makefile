@@ -37,7 +37,7 @@ endif
 CC_CMD = $(QUIET_CC) $(CC) $(CFLAGS) -o $@ -c $<
 CXX_CMD = $(QUIET_CXX) $(CXX) $(CFLAGS) -o $@ -c $<
 AR_CMD = $(QUIET_AR) $(AR) cr $@ $^
-SO_CMD = $(QUIET_LINK) $(CC) -fPIC --shared -Wl,-soname,$(notdir $@) $^ -o $@ $(LIBS)
+SO_CMD = $(QUIET_LINK) $(CC) $(LDFLAGS_SO) $^ -o $@ $(LIBS) $(THIRD_LIBS)
 LINK_CMD = $(QUIET_LINK) $(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
 LINK_V8_CMD = $(QUIET_LINK) $(CXX) $(LDFLAGS) -o $@ $^ $(LIBS_V8)
 MKDIR_CMD = $(QUIET_MKDIR) mkdir -p $@
@@ -81,8 +81,13 @@ $(OUT)/%.o : scripts/%.c | $(OUT)
 # --- Fitz, MuPDF, MuXPS and MuCBZ library ---
 
 FITZ_LIB := $(OUT)/libfitz.a
-FITZ_LIB_SO := $(OUT)/libfitz.so.1.0
 FITZ_V8_LIB := $(OUT)/libfitzv8.a
+ifeq (Windows_NT,$(OS))
+FITZ_LIB_SO := $(OUT)/libfitz.dll
+else
+FITZ_LIB_SO := $(OUT)/libfitz.so.1.2
+endif
+LDFLAGS_SO := -fPIC --shared -static-libgcc -Wl,-soname,$(notdir $(FITZ_LIB_SO))
 
 FITZ_SRC := $(notdir $(wildcard fitz/*.c draw/*.c))
 FITZ_SRC := $(filter-out draw_simple_scale.c, $(FITZ_SRC))
@@ -111,7 +116,10 @@ libs: $(FITZ_LIB) $(FITZ_LIB_SO) $(THIRD_LIBS)
 
 $(FITZ_LIB_SO):
 	$(SO_CMD)
+ifneq (Windows_NT,$(OS))
 	@cd $(OUT) && ln -s $(notdir $(FITZ_LIB_SO)) libfitz.so
+endif
+
 libs_v8: libs $(FITZ_V8_LIB)
 
 # --- Generated CMAP, FONT and JAVASCRIPT files ---
