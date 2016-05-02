@@ -5,6 +5,9 @@ OS := $(OS:MINGW%=MINGW)
 OS := $(OS:Windows_NT=MINGW)
 
 CFLAGS += -Wall
+ifneq (MINGW,$(OS)) # on Windows, -fPIC is already the default
+CFLAGS += -fPIC
+endif
 
 ifeq "$(build)" "debug"
 CFLAGS += -pipe -g -DDEBUG
